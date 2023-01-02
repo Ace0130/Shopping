@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
     const navigate = useNavigate();
+
     return (
         <section className="flex h-screen ">
         
@@ -16,14 +18,14 @@ const Login = () => {
                     <form>
                         
                         <div>
-                            <label className="block mb-1 text-indigo-500" for="emailAdress">Email adress</label>
-                            <input alt="" className="w-full rounded p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" 
+                            <label className="block mb-1 text-indigo-500" htmlFor="emailAdress">Email adress</label>
+                            <input id="email" alt="" className="w-full rounded p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" 
                                 type="text" email="emailAdress" placeholder="Email adress"/>
                         </div>
                         
                         <div>
-                            <label className="block mb-1 text-indigo-500" for="password">Password</label>
-                            <input alt="" className="w-full rounded p-2 mb-6 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" 
+                            <label className="block mb-1 text-indigo-500" htmlFor="password">Password</label>
+                            <input id="password" alt="" className="w-full rounded p-2 mb-6 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" 
                                 type="password" name="password" placeholder="Password"/>
                         </div>
                         
@@ -32,6 +34,22 @@ const Login = () => {
                             className="inline-block mb-2 px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring focus:ring-yellow-600 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
                             data-mdb-ripple="true"
                             data-mdb-ripple-color="light"
+                            onClick={() => {
+                                const email = document.getElementById('email');
+                                const password = document.getElementById('password');
+                                axios.post('http://localhost:3001/loginInfo', {
+                                    email: email.value, 
+                                    password: password.value
+                                })
+                                // /signin 경로로 넘어가지만 안넘어가는 경우가 간혹 있음. 나중에 수정 필요
+                                .then((response) => {
+                                    navigate(`/signin`);
+                                })
+                                // status가 안정적이지 않을 때 오류 처리, 정상적으로 동작할때도 500으로 오류 출력, 인터넷 결과 문제인지 확인
+                                .catch((error) => {
+                                    alert(error);
+                                });
+                            }}
                         >
                             Sign in
                         </button>
