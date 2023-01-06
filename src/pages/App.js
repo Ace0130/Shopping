@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import Login from './Login';
 import Main from './Main';
 import MyPage from './MyPage';
-import NotFound from './NotFound';
-import Signin from './Signin';
 import Product from './Product';
+import Login from './Login';
+import SignUp from './SignUp';
+import NotFound from './NotFound';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Route path="/mypage" element={<MyPage />}></Route>
       <Route path="/product/:detail" element={<Product />}></Route>
       <Route path="/login" element={<Login />}></Route>
-      <Route path="/signin" element={<Signin />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
