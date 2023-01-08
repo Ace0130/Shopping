@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useState, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const validateEmail = email => {
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -12,10 +12,14 @@ const validatePassword = password => {
     return regex.test(password);
 }
 
-const SignUp = () => {
+const Update = () => {
+    const location = useLocation();
     const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
+    const [name, setName] = useState(location.state.name);
+    const [email, setEmail] = useState(location.state.email);
+    const [password, setPassword] = useState(location.state.password);
     const navigate = useNavigate();
 
     const submit = async (event) => {
@@ -43,16 +47,22 @@ const SignUp = () => {
         }
 
         try {
+            const stateEmail = location.state.email
             const hasUser = await axios.get(`http://localhost:3001/profile?email=${email}`);
-            if (hasUser?.data?.length > 0) {
-                throw new Error('회원정보에 이미 존재하는 이메일입니다.');
+            if (hasUser?.data?.length === 1) {
+                if (stateEmail !== email) {
+                    throw new Error('회원정보에 이미 존재하는 이메일입니다.');
+                }
             }
 
-            await axios.post('http://localhost:3001/profile', {
+            const changeUser = await axios.get(`http://localhost:3001/profile?email=${stateEmail}`);
+            const id = changeUser.data[0].id
+            await axios.put(`http://localhost:3001/profile/${id}`, {
                 name: name,
                 email: email,
                 password: password
             });
+
             navigate('/mypage', {
                 state: { isLoggined: true, email: email, password: password },
             });
@@ -62,11 +72,11 @@ const SignUp = () => {
         }
     };
 
-    return (
+    return <div>
         <div className="h-screen bg-orange-400 flex flex-col items-center sm:h-full md:h-screen">
             <div className="items-center mx-auto my-10">
                 <h1 id="h1" className="text-8xl font-bold text-sky-300 text-center">
-                    Sign Up
+                    Update Info
                 </h1>
             </div>
             <div className="container px-8 py-12 bg-sky-300 rounded-lg p-5 m-auto">
@@ -83,19 +93,19 @@ const SignUp = () => {
                             <div>
                                 <label className="block mb-1 text-indigo-500" htmlFor="name">Name</label>
                                 <input id="name" ref={nameRef} alt="" className="w-full rounded p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300"
-                                    type="text" name="name" placeholder="Name" />
+                                    type="text" name="name" placeholder="Name" value={name} onChange={event => { setName(event.target.value); }} />
                             </div>
 
                             <div>
                                 <label className="block mb-1 text-indigo-500" htmlFor="emailAdress">Email adress</label>
                                 <input id="email" ref={emailRef} alt="" className="w-full rounded p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300"
-                                    type="email" email="emailAdress" placeholder="Email adress" />
+                                    type="email" email="emailAdress" placeholder="Email adress" value={email} onChange={event => { setEmail(event.target.value); }} />
                             </div>
 
                             <div>
                                 <label className="block mb-1 text-indigo-500" htmlFor="password">Password</label>
                                 <input id="password" ref={passwordRef} alt="" className="w-full rounded p-2 mb-6 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300"
-                                    type="password" name="password" placeholder="Password" />
+                                    type="password" name="password" placeholder="Password" value={password} onChange={event => { setPassword(event.target.value); }} />
                             </div>
 
                             <button
@@ -105,15 +115,14 @@ const SignUp = () => {
                                 data-mdb-ripple-color="light"
                                 onClick={event => submit(event)}
                             >
-                                Sign Up
+                                Modify
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+}
 
-    );
-};
-
-export default SignUp;
+export default Update;

@@ -4,6 +4,7 @@ import MyPage from './MyPage';
 import Product from './Product';
 import Login from './Login';
 import SignUp from './SignUp';
+import Update from './Update';
 import NotFound from './NotFound';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Route path="/product/:detail" element={<Product />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/update" element={<Update />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );

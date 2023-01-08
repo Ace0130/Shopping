@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const MyPage = () => {
+    const [id, setId] = useState();
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -11,8 +12,11 @@ const MyPage = () => {
 
     useEffect(() => {
         let isLoggined = location.state.isLoggined
+
         if (!isLoggined) {
-            navigate('/login', { state: { isLoggined: false } });
+            navigate('/login', {
+                state: { isLoggined: false }
+            });
         }
     }, []);
 
@@ -20,10 +24,19 @@ const MyPage = () => {
     axios.get("http://localhost:3001/profile")
         .then((response) => {
             const length = response.data.length
+            const email = location.state.email
+            const password = location.state.password
+
             if (length !== 0) {
-                setName(response.data[length - 1].name);
-                setEmail(response.data[length - 1].email);
-                setPassword(response.data[length - 1].password);
+                for (let data of response.data) {
+                    if (data.email === email && data.password === password) {
+                        setId(data.id);
+                        setName(data.name);
+                        setEmail(data.email);
+                        setPassword(data.password);
+                        break
+                    }
+                }
             }
         });
 
@@ -32,9 +45,28 @@ const MyPage = () => {
         <div>name : {name}</div>
         <div>email : {email}</div>
         <div>password : {password}</div>
-        <button onClick={() => {
-            navigate('/', { state: { isLoggined: false } });
-        }}>Log Out</button>
+        <li>
+            <button onClick={() => {
+                navigate('/', {
+                    state: { isLoggined: false }
+                });
+            }}>Log Out</button>
+        </li>
+        <li>
+            <button onClick={() => {
+                navigate('/update', {
+                    state: { isLoggined: false, name: name, email: email, password: password }
+                });
+            }}>Update</button>
+        </li>
+        <li>
+            <button onClick={() => {
+                axios.delete(`http://localhost:3001/profile/${id}`);
+                navigate('/', {
+                    state: { isLoggined: false, name: name, email: email, password: password }
+                });
+            }}>Delete</button>
+        </li>
     </div>
 }
 
