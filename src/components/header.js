@@ -21,7 +21,7 @@ export default function Header() {
         </div>
       </div>
       <div className="bg-zinc-600 text-fuchsia-300 hover:text-fuchsia-400">
-        <Link to="/mypage">마이페이지</Link>
+        <Link to="/mypage" state={{ isLoggined: false }}>마이페이지</Link>
       </div>
     </header>
   );
