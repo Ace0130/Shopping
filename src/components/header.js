@@ -1,27 +1,51 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="flex h-26 mb-6 rounded-md border-b-8 border-violet-500">
-      <div className="flex-1 py-4 bg-zinc-600">
+    <header className="flex h-26 mb-6 rounded-md border-b-8 border-black-500">
+      <div className="flex-1 py-4 bg-white-600">
         <div className="flex flex-row justify-items-start">
           <img
-            className="w-24"
+            className="w-12 h-12 max-w-[3rem] max-h-[3rem] pointer-events-none"
             alt="shopping"
-            src="https://cdn.pixabay.com/photo/2018/02/08/16/35/silhouette-3139806__340.png"
+            src={"/image/shopify.svg"}
           />
           <Link to="/">
-            <h1
-              className="text-6xl font-semibold tracking-tighter text-fuchsia-400 
-              hover:text-fuchsia-500 inline"
-            >
-              OuterPark
+            <h1 className="text-5xl font-semibold tracking-tighter text-black-400 inline vertical-align:bottom font-medium ">
+              Shopping Mall
             </h1>
           </Link>
         </div>
       </div>
-      <div className="bg-zinc-600 text-fuchsia-300 hover:text-fuchsia-400">
-        <Link to="/mypage">마이페이지</Link>
+
+      <div>
+        <Link to="/mypage">
+          <img
+            className="w-24 h-20 my-4 justify-center sm:justify-between sm:px-5"
+            alt="mypage"
+            src={"/image/mypage.svg"}
+          />
+        </Link>
+      </div>
+
+      <div>
+        <Link to="/mypage">
+          <img
+            className="w-24 h-20 my-4"
+            alt="cart"
+            src={"/image/shoppingcart.svg"}
+          />
+        </Link>
+      </div>
+
+      <div>
+        <Link to="/mypage">
+          <img
+            className="w-24 h-20 my-4"
+            alt="lately"
+            src={"/image/lately.svg"}
+          />
+        </Link>
       </div>
     </header>
   );
