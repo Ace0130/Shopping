@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const MainProduct = ({ props: data }) => {
   const navigate = useNavigate();
   return (
-    <div className="p-5 md:w-1/2 lg:w-1/3">
+    <div className="p-5 md:w-1/2 lg:w-1/3 min-w-[240px]">
       {/* 각각의 상품 테두리 */}
       <div
         key={data.id}
